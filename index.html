@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>محرر الصور - OpenCV.js</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>تحرير الصور</h1>
+      <div class="actions">
+        <label class="btn">
+          <input id="fileInput" type="file" accept="image/*" hidden>
+          فتح صورة
+        </label>
+        <button id="btnReset" class="btn" disabled>إعادة ضبط</button>
+        <button id="btnDownload" class="btn primary" disabled>تنزيل</button>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="preview">
+        <div class="canvas-col">
+          <h3>الأصل</h3>
+          <canvas id="canvasSrc" width="640" height="640"></canvas>
+        </div>
+        <div class="canvas-col">
+          <h3>المعدلة</h3>
+          <canvas id="canvasDst" width="640" height="640"></canvas>
+        </div>
+      </section>
+
+      <section class="controls">
+        <div class="toolbar">
+          <button class="btn" id="presetPassport" disabled>القالب: تحسين صورة الهوية</button>
+          <button class="btn" id="toggleSplit" disabled>تبديل عرض المقارنة</button>
+          <button class="btn" id="btnAI" style="background-color: #2196F3; color: white;">تفعيل الذكاء الاصطناعي</button>
+        </div>
+
+        <!-- قسم التحليل الذكي -->
+        <div id="aiAnalysis" class="ai-section" style="display: none; background: #1a1a1a; padding: 20px; margin: 15px 0; border-radius: 12px; border: 2px solid #00ff88; box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);">
+          <h4 style="margin: 0 0 15px 0; color: #00ff88; font-size: 18px; font-weight: bold; text-align: center; border-bottom: 2px solid #00ff88; padding-bottom: 8px;">🤖 تحليل الصورة الذكي</h4>
+          <div id="qualityInfo" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; font-size: 15px; font-weight: 500;">
+            <div style="background: #2d2d2d; padding: 12px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); border-left: 4px solid #00bcd4; color: #ffffff;">السطوع: <span id="aiBrightness" style="color: #00bcd4; font-weight: bold; font-size: 16px;">-</span></div>
+            <div style="background: #2d2d2d; padding: 12px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); border-left: 4px solid #ff9800; color: #ffffff;">التباين: <span id="aiContrast" style="color: #ff9800; font-weight: bold; font-size: 16px;">-</span></div>
+            <div style="background: #2d2d2d; padding: 12px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); border-left: 4px solid #e91e63; color: #ffffff;">الوضوح: <span id="aiSharpness" style="color: #e91e63; font-weight: bold; font-size: 16px;">-</span></div>
+            <div style="background: #2d2d2d; padding: 12px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); border-left: 4px solid #4caf50; color: #ffffff;">الجودة: <span id="aiQuality" style="color: #4caf50; font-weight: bold; font-size: 16px;">-</span></div>
+            <div style="background: #2d2d2d; padding: 12px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); border-left: 4px solid #f44336; color: #ffffff;">الوجوه المكتشفة: <span id="aiFaces" style="color: #f44336; font-weight: bold; font-size: 16px;">-</span></div>
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="control">
+            <label>السطوع <span id="valBrightness">0</span></label>
+            <input id="sliderBrightness" type="range" min="-100" max="100" step="1" value="0" disabled>
+          </div>
+          <div class="control">
+            <label>التباين <span id="valContrast">0</span></label>
+            <input id="sliderContrast" type="range" min="-100" max="100" step="1" value="0" disabled>
+          </div>
+          <div class="control">
+            <label>الوضوح <span id="valClarity">0</span></label>
+            <input id="sliderClarity" type="range" min="0" max="200" step="1" value="0" disabled>
+          </div>
+          <div class="control">
+            <label>تنعيم <span id="valSmooth">0</span></label>
+            <input id="sliderSmooth" type="range" min="0" max="20" step="1" value="0" disabled>
+          </div>
+          <div class="control">
+            <label>تنعيم البشرة <span id="valSkin">0</span></label>
+            <input id="sliderSkin" type="range" min="0" max="100" step="1" value="0" disabled>
+          </div>
+          <div class="control">
+            <label>توازن اللون الأبيض <span id="valWB">0</span></label>
+            <input id="sliderWB" type="range" min="-50" max="50" step="1" value="0" disabled>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span id="status">جارٍ تحميل OpenCV…</span>
+    </footer>
+
+    <script src="https://docs.opencv.org/4.x/opencv.js" async defer></script>
+    <script src="app.js"></script>
+  </body>
+</html>
+
